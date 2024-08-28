@@ -17,7 +17,14 @@ module Grafana
         "title" => properties[:title],
         "parentUid" => properties[:parentUid]
       }.compact # Удалить nil-поля
-      return post_request(endpoint, folder_data.to_json)
+      Rails.logger.info "Sending data to Grafana: #{folder_data}"
+      response = post_request(endpoint, folder_data.to_json)
+      if response.success?
+        Rails.logger.info "Folder created successfully: #{response.body}"
+      else
+        Rails.logger.error "Failed to create folder: #{response.status} #{response.body}"
+      end
+      return response
     end
 
     def update_folder(uid='', properties={})
