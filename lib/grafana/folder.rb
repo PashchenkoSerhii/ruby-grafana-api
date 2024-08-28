@@ -19,15 +19,9 @@ module Grafana
       "parentUid" => properties['parentUid']
     }.compact # Удалить nil-поля
     Rails.logger.info "Sending data to Grafana: #{folder_data}"
-    response = post_request(endpoint, folder_data.to_json)
+    return post_request(endpoint, folder_data.to_json)
     
-    if response[:status] == 200 # или другой подходящий код успеха
-      Rails.logger.info "Folder created successfully: #{response}"
-      return response # или response[:data], в зависимости от структуры ответа
-    else
-      Rails.logger.error "Failed to create folder: #{response[:status]} #{response}"
-      return nil # Или можете выбросить исключение
-    end
+    
   end
 
     def update_folder(uid='', properties={})
