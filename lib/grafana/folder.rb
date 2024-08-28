@@ -13,6 +13,7 @@ module Grafana
     
     def create_folder(properties={})
       endpoint = "/api/folders"
+      Rails.logger.info "properties: #{properties}"
       folder_data = {
         "title" => properties[:title],
         "parentUid" => properties[:parentUid]
