@@ -68,7 +68,7 @@ end
       folder_query = params['folderUid'].present? ? "&folderIds=#{params['folderUid']}" : ''
 
       # Построение конечного URL для запроса
-      endpoint = "/api/search/?query=#{params['query']}&starred=#{params['starred']}&tag=#{params['tags']}#{folder_query}"
+      endpoint = "/api/search?query=#{params['query']}&starred=#{params['starred']}&tags=#{params['tags']}#{folder_query}"
       Rails.logger.info "Constructed endpoint for search_dashboards: #{endpoint}"
 
       response = get_request(endpoint)
