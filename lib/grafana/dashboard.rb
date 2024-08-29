@@ -57,20 +57,25 @@ end
     end
 
     def search_dashboards(params={})
-  Rails.logger.info "Initial parameters: #{params}"
+      Rails.logger.info "Initial parameters: #{params}"
 
-  params['query'] = params['query'].presence ? CGI.escape(params['query']) : ''
-  params['starred'] = params['starred'].to_s
-  params['tags'] = params['tags'].to_s
+      # Стандартная обработка параметров
+      params['query'] = params['query'].presence ? CGI.escape(params['query']) : ''
+      params['starred'] = params['starred'].to_s
+      params['tags'] = params['tags'].to_s
 
-  endpoint = "/api/search/?query=#{params['query']}&starred=#{params['starred']}&tag=#{params['tags']}"
-  Rails.logger.info "Constructed endpoint for search_dashboards: #{endpoint}"
+      # Добавляем фильтр по folderUid, если он есть
+      folder_query = params['folderUid'].present? ? "&folderIds=#{params['folderUid']}" : ''
 
-  response = get_request(endpoint)
-  Rails.logger.info "Response from search_dashboards: #{response}"
+      # Построение конечного URL для запроса
+      endpoint = "/api/search/?query=#{params['query']}&starred=#{params['starred']}&tag=#{params['tags']}#{folder_query}"
+      Rails.logger.info "Constructed endpoint for search_dashboards: #{endpoint}"
 
-  response
-end
+      response = get_request(endpoint)
+      Rails.logger.info "Response from search_dashboards: #{response}"
+
+      response
+    end
   end
 
 end
