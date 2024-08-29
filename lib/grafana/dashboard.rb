@@ -53,12 +53,20 @@ module Grafana
     end
 
     def search_dashboards(params={})
-      params['query'] = (params['query'].length >= 1 ? CGI::escape(params['query']) : '' )
-      params['starred'] = (!!params['starred']).to_s
-      endpoint = "/api/search/?query=#{params['query']}&starred=#{params['starred']}&tag=#{params['tags']}"
-      return get_request(endpoint)
-    end
+  Rails.logger.info "Initial parameters: #{params}"
 
+  params['query'] = params['query'].presence ? CGI.escape(params['query']) : ''
+  params['starred'] = params['starred'].to_s
+  params['tags'] = params['tags'].to_s
+
+  endpoint = "/api/search/?query=#{params['query']}&starred=#{params['starred']}&tag=#{params['tags']}"
+  Rails.logger.info "Constructed endpoint for search_dashboards: #{endpoint}"
+
+  response = get_request(endpoint)
+  Rails.logger.info "Response from search_dashboards: #{response}"
+
+  response
+end
   end
 
 end
