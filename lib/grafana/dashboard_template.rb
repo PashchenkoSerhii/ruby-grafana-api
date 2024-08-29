@@ -34,6 +34,7 @@ module Grafana
             "annotations": {
               "list": []
             },
+            "tags": %{tags},
             "hideControls": false,
             "timezone": "",
             "editable": true,
@@ -56,11 +57,13 @@ module Grafana
         }
       ]
       Rails.logger.info "Constructed dashboard template: #{tpl}"
+      tags_json = params['tags'].to_json
       return tpl % {
         title: params['title'],
         from: params['from'],
         to: params['to'],
         rows: rows.join(','),
+        tags: tags_json,
         folder_uid: params['folderUid']
       }
 
