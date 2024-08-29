@@ -9,7 +9,7 @@ module Grafana
 
 
     def build_template(params={})
-
+      Rails.logger.info "Received parameters for build_template: #{params}"
       if !params.has_key?('from')
         params['from'] = 'now-24h'
       end
@@ -24,7 +24,7 @@ module Grafana
       params['panels'].each do |panel|
         rows.push(self.build_panel(panel))
       end
-
+      Rails.logger.info "Constructed rows: #{rows}"
       tpl = %q[
         {
           "dashboard": {
@@ -55,7 +55,7 @@ module Grafana
           "folderUid": "%{folder_uid}"
         }
       ]
-
+      Rails.logger.info "Constructed dashboard template: #{tpl}"
       return tpl % {
         title: params['title'],
         from: params['from'],
@@ -68,7 +68,7 @@ module Grafana
 
 
     def build_panel(params={})
-
+      Rails.logger.info "Received parameters for build_panel: #{params}"
       panel = %q[
         {
           "editable": true,
@@ -146,6 +146,9 @@ module Grafana
         targets.push(self.build_target(t))
       end
 
+      Rails.logger.info "Constructed targets for panel: #{targets}"
+
+      Rails.logger.info "Constructed panel: #{panel}"
       return panel % {
         description: params['description'],
         title: params['title'],
@@ -158,6 +161,7 @@ module Grafana
     end
 
     def build_target(params={})
+      Rails.logger.info "Received parameters for build_target: #{params}"
       target = %q[
         {
           "exemplar": true,
@@ -168,6 +172,7 @@ module Grafana
         }
       ]
 
+      Rails.logger.info "Constructed target: #{target}"
       return target % {
         expr: params['expr'],
         refId: params['refId']
