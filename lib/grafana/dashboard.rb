@@ -36,6 +36,7 @@ module Grafana
 end
 
     def update_dashboard(dashboard)
+      Rails.logger.info "update_dashboard : #{dashboard.to_json}"
       endpoint = "/api/dashboards/db"
       return post_request(endpoint, dashboard.to_json)
     end
@@ -65,7 +66,7 @@ end
       params['tags'] = params['tags'].to_s
 
       # Добавляем фильтр по folderUid, если он есть
-      folder_query = params['folderUid'].present? ? "&folderIds=#{params['folderUid']}" : ''
+      folder_query = params['folderId'].present? ? "&folderIds=#{params['folderId']}" : ''
 
       # Построение конечного URL для запроса
       endpoint = "/api/search?query=#{params['query']}&starred=#{params['starred']}&tags=#{params['tags']}#{folder_query}"
